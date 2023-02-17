@@ -39,7 +39,7 @@ exports.createMovie = (req, res) => {
 
 //create sequelize model controller for get all movies
 exports.findAllMovies = (req, res) => {
-  Movie.findAll()
+  Movie.findAll({ benchmark: true, logging: console.log })
     .then((data) => {
       res.send(data);
     })
