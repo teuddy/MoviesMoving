@@ -7,6 +7,13 @@ const AdminBro = require("admin-bro");
 const AdminBroExpress = require("@admin-bro/express");
 const AdminBroSequelize = require("@admin-bro/sequelize");
 
+const redis = require("./config/redisClient.js");
+
+redis.connect().then(() => {
+  redis.set("name", "teuddy");
+  console.log("Redis connected");
+});
+
 //register adapter
 AdminBro.registerAdapter(AdminBroSequelize);
 
