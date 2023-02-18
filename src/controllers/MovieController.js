@@ -1,4 +1,5 @@
 const Movie = require("../models/index").movies;
+const redisClient = require("../config/redisClient.js");
 
 //create sequelize model controller for create a movie
 exports.createMovie = (req, res) => {
@@ -28,6 +29,8 @@ exports.createMovie = (req, res) => {
   //save movie in the database
   Movie.create(movie)
     .then((data) => {
+      //persist movie inside redis
+      redisClient.set(JSON.stringify(data.id), JSON.stringify(movie));
       res.send(data);
     })
     .catch((err) => {

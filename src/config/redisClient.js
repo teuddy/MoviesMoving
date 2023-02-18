@@ -1,10 +1,12 @@
-//set up redis client
-const redis = require("redis");
-
 //connect to redis and then export the client
+const redis = require("redis");
+let redisClient;
+(async () => {
+  redisClient = redis.createClient();
 
-const client = redis.createClient({});
+  redisClient.on("error", (error) => console.error(`Error Redis: ${error}`));
 
-client.on("error", (err) => console.error("Redis Client Error", err));
+  await redisClient.connect();
+})();
 
-module.exports = client;
+module.exports = redisClient;
