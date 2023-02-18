@@ -26,6 +26,14 @@ module.exports = (sequelize, Sequelize) => {
         as: "genreId",
       },
     });
+
+    //a genre has many series
+    Genre.hasMany(models.series, {
+      foreignKey: {
+        allowNull: false,
+        as: "genreId",
+      },
+    });
   };
   return Genre;
 };

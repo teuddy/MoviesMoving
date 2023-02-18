@@ -11,10 +11,22 @@ module.exports = {
         autoIncrement: true,
         allowNull: false,
       },
+      //title
       title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      //genre association
+      genreId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "genres",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
+      },
+
       //description
       description: {
         type: Sequelize.STRING,

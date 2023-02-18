@@ -39,5 +39,14 @@ module.exports = (sequelize, Sequelize) => {
       },
     });
   };
+  // genres has many series
+  Serie.associate = (models) => {
+    Serie.belongsTo(models.genres, {
+      foreignKey: {
+        allowNull: false,
+        as: "genreId",
+      },
+    });
+  };
   return Serie;
 };

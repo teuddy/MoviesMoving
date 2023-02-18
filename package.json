@@ -10,11 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "-": "^0.0.1",
+    "@admin-bro/express": "^3.1.0",
+    "@admin-bro/sequelize": "^1.2.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-formidable": "^1.2.0",
     "g": "^2.0.1",
+    "l": "^0.6.0",
     "mysql2": "^3.1.2",
     "sequelize": "^6.28.0",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "tslib": "^2.5.0"
   }
 }
