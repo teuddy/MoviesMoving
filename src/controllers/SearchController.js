@@ -1,15 +1,9 @@
 const Movie = require("../models/index").movies;
 const Genre = require("../models/index").genres;
 const { Op } = require("sequelize");
-const express = require("express");
 
-const { eliminateMovie } = require("../controllers/MovieController.js");
-
-const router = express.Router();
-
-//find all movies where title match the search query or search query match the genre name
-//resoruces?search=somequery:D
-router.route("/").get((req, res) => {
+//create search controller
+exports.searching = (req, res) => {
   Movie.findAll({
     attributes: [
       "id",
@@ -47,6 +41,4 @@ router.route("/").get((req, res) => {
   }).then((movies) => {
     res.json({ movies: movies });
   });
-});
-
-module.exports = router;
+};

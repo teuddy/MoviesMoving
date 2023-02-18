@@ -1,6 +1,6 @@
 const MoviesRoutes = require("./MoviesRouter");
 const GenresRoutes = require("./GenresRouter");
-const SearchingRoutes = require("./SearchingRoute");
+const SearchingRoutes = require("./SearchingRouter");
 const express = require("express");
 
 const router = express.Router();
