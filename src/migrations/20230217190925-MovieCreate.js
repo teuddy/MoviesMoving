@@ -37,7 +37,7 @@ module.exports = {
       },
       //movieFile:
       movieFile: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT("long"),
         allowNull: false,
       },
       createdAt: {

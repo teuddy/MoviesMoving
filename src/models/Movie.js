@@ -26,9 +26,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    //movieFile:
+    //movieFile should be large string
     movieFile: {
-      type: Sequelize.STRING,
+      //type should be long text
+      type: Sequelize.TEXT("long"),
       allowNull: false,
     },
   });
@@ -37,6 +38,7 @@ module.exports = (sequelize, Sequelize) => {
     Movie.belongsTo(models.genres, {
       foreignKey: {
         allowNull: false,
+        as: "genreId",
       },
     });
   };

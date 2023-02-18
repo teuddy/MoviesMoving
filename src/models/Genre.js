@@ -23,6 +23,7 @@ module.exports = (sequelize, Sequelize) => {
     Genre.hasMany(models.movies, {
       foreignKey: {
         allowNull: false,
+        as: "genreId",
       },
     });
   };
