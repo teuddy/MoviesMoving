@@ -2,6 +2,9 @@ const express = require("express");
 const route = require("./routers/index.js");
 const db = require("./models");
 
+//gracefully shutdown
+const { createTerminus } = require("@godaddy/terminus");
+
 //admin pannel
 const AdminBro = require("admin-bro");
 const AdminBroExpress = require("@admin-bro/express");
@@ -32,3 +35,26 @@ app.use("/v1", route);
 app.listen(3000, () => {
   console.log("Listening on port 3000");
 });
+
+//helth check
+
+const onHealthCheck = () => Promise.resolve("UP");
+
+//when receveis SIGINT signal
+const onSignal = () => {
+  console.log("server is starting cleanup");
+  return Promise.resolve();
+};
+
+//pacefully stop server
+{
+  createTerminus;
+}
+app,
+  {
+    signal: "SIGINT",
+    healthChecks: {
+      "/health": onHealthCheck,
+    },
+    onSignal,
+  };
