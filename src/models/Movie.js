@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
 
+const redisClient = require("../config/redisClient.js");
+
 //create movie model
 
 module.exports = (sequelize, Sequelize) => {
@@ -42,6 +44,10 @@ module.exports = (sequelize, Sequelize) => {
       },
     });
   };
+
+  Movie.afterCreate((movie) => {
+    redisClient.del("movies");
+  });
 
   return Movie;
 };

@@ -1,26 +1,14 @@
 const Movie = require("../models/index").movies;
 const redisClient = require("../config/redisClient.js");
 
+const redisController = require("../controllers/RedisController.js");
+
 //create sequelize model controller for create a movie
 exports.createMovie = (req, res) => {
-  //validate request if it comes with title,genre,year,coverImage and movieFile
-  if (
-    !req.body.title ||
-    !req.body.genre_id ||
-    !req.body.year ||
-    !req.body.coverImage ||
-    !req.body.movieFile
-  ) {
-    res.status(400).send({
-      message: "Content can not be empty!",
-    });
-    return;
-  }
-
   //create a movie with the request body
   const movie = {
     title: req.body.title,
-    genreId: req.body.genre_id,
+    genreId: req.body.genreId,
     year: req.body.year,
     coverImage: req.body.coverImage,
     movieFile: req.body.movieFile,
@@ -29,8 +17,8 @@ exports.createMovie = (req, res) => {
   //save movie in the database
   Movie.create(movie)
     .then((data) => {
-      //persist movie inside redis
-      redisClient.set(JSON.stringify(data.id), JSON.stringify(movie));
+      //invalidate redis cache
+      redisController.deleteDataFromRedis("movies");
       res.send(data);
     })
     .catch((err) => {
@@ -41,16 +29,30 @@ exports.createMovie = (req, res) => {
 };
 
 //create sequelize model controller for get all movies
-exports.findAllMovies = (req, res) => {
-  Movie.findAll({ benchmark: true, logging: console.log })
-    .then((data) => {
+exports.findAllMovies = async (req, res) => {
+  try {
+    //check if redis has the data
+    const data = await redisController.getDataFromRedis("movies");
+    if (data) {
       res.send(data);
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving movies.",
-      });
-    });
+    } else {
+      //get all movies from the database
+      Movie.findAll()
+        .then((data) => {
+          //set redis cache
+          redisController.setDataToRedis("movies", data);
+          res.send(data);
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while retrieving movies.",
+          });
+        });
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //delete a movie by it's id

@@ -1,5 +1,9 @@
 const express = require("express");
 
+const validate = require("../validators/validate.js");
+
+const Schema = require("../validators/Schemas.js");
+
 const {
   findAllMovies,
   createMovie,
@@ -8,22 +12,15 @@ const {
 
 const router = express.Router();
 
-//create a movie C
-router.route("/create").post((req, res) => {
-  //call the createMovie function from MovieController
-  createMovie(req, res);
-});
+router.route("/create").post(
+  (req, res, next) => validate(req, res, next, Schema.createMovieSchema),
+  (req, res) => createMovie(req, res)
+);
 
 //get all movies R
-router.route("/getall").get((req, res) => {
-  //call the findAllMovies function from MovieController
-  findAllMovies(req, res);
-});
+router.route("/getall").get((req, res) => findAllMovies(req, res));
 
 //delete a movie D
-router.route("/:id").delete((req, res) => {
-  //call the deleteMovie function from MovieController
-  deleteMovie(req, res);
-});
+router.route("/:id").delete((req, res) => deleteMovie(req, res));
 
 module.exports = router;

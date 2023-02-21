@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const redisClient = require("../config/redisClient.js");
 
 //create genre model
 
@@ -35,5 +36,10 @@ module.exports = (sequelize, Sequelize) => {
       },
     });
   };
+
+  //after genre creation, delete genres cache
+  Genre.afterCreate(() => {
+    redisClient.del("genres");
+  });
   return Genre;
 };

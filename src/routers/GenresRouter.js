@@ -1,30 +1,20 @@
 const express = require("express");
-
-//middlewares
-const cacheMiddleware = require("../middleware/cacheMiddleware.js");
-
 const {
   findAllGenres,
   createGenre,
 } = require("../controllers/GenreController.js");
 
+const validate = require("../validators/validate.js");
+const Schema = require("../validators/Schemas.js");
+
 const router = express.Router();
+router.route("/create").post(
+  (req, res, next) => validate(req, res, next, Schema.createGenreSchema),
+  (req, res, next) => createGenre(req, res, next)
+);
 
-//use cacheMiddleware for all routes
-router.use(cacheMiddleware);
-
-// //GENRES
-// //create a genre C
-router.route("/create").post((req, res) => {
-  //call the createGenre function from GenreController
-  createGenre(req, res);
-});
-//get all genres R
-//add  a middleware to check if the data is in the redis cache
 router.route("/getall").get((req, res) => {
-  //call the findAllGenres function from GenreController
-  res.send("hey");
-  // findAllGenres(req, res);
+  findAllGenres(req, res);
 });
 
 module.exports = router;

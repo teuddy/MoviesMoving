@@ -1,50 +1,55 @@
 const Serie = require("../models/index.js").series;
 
+const redisController = require("../controllers/RedisController.js");
+
 //create a serie in the db
 
-exports.createSerie = (req, res) => {
-  //check if in the body comes title,description,coverImage and year
-  const { title, description, coverImage, year, genreId } = req.body;
-
-  if (!title || !description || !coverImage || !year || !genreId) {
-    return res.status(400).send({ message: "Content can not be empty!" });
-  }
-
-  Serie.findOne({ where: { title } })
-    .then((serie) => {
-      if (serie) {
-        return res.status(400).send({ message: "Serie already exists!" });
-      }
-
-      Serie.create({ title, description, coverImage, year, genreId })
-        .then((data) => res.send(data))
+exports.createSerie = async (req, res) => {
+  //delete from cache
+  await redisController.deleteDataFromRedis("series");
+  //create serie
+  Serie.create({
+    genreId: req.body.genreId,
+    title: req.body.title,
+    year: req.body.year,
+    coverImage: req.body.coverImage,
+    description: req.body.description,
+  })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: err.message || "Some error occurred while creating the Serie.",
+      });
+    });
+};
+//get all series and include the genres
+exports.getAllSeries = async (req, res) => {
+  try {
+    //get it from cache
+    const data = await redisController.getDataFromRedis("series");
+    if (data) {
+      return res.send(data);
+    } else {
+      Serie.findAll(
+        {
+          attributes: ["id", "title", "description", "coverImage", "year"],
+          include: ["genre"],
+        },
+        { order: [["id", "DESC"]] }
+      )
+        .then((data) => {
+          //set it to cache
+          redisController.setDataToRedis("series", data);
+          res.send(data);
+        })
         .catch((err) =>
           res.status(500).send({
             message:
-              err.message || "Some error occurred while creating the Serie.",
+              err.message || "Some error occurred while retrieving series.",
           })
         );
-    })
-    .catch((err) =>
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while searching for the Serie.",
-      })
-    );
-};
-//get all series and include the genres
-exports.getAllSeries = (req, res) => {
-  Serie.findAll(
-    {
-      attributes: ["id", "title", "description", "coverImage", "year"],
-      include: ["genre"],
-    },
-    { order: [["id", "DESC"]] }
-  )
-    .then((data) => res.send(data))
-    .catch((err) =>
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving series.",
-      })
-    );
+    }
+  } catch (error) {}
 };

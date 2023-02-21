@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
 
+const redisClient = require("../config/redisClient.js");
+
 //create a Serie model
 module.exports = (sequelize, Sequelize) => {
   const Serie = sequelize.define("series", {
@@ -48,5 +50,9 @@ module.exports = (sequelize, Sequelize) => {
       },
     });
   };
+  Serie.afterCreate(async (serie) => {
+    await redisClient.del("series");
+  });
+
   return Serie;
 };
