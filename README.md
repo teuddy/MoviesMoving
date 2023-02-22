@@ -1,5 +1,7 @@
 # Movies Moving
 
+![Build Status](https://img.shields.io/github/workflow/status/teuddy/MoviesMoving/Node.js%20CI/main)
+
 **Movies Moving** es una REST API que permite acceder a información de películas y series.
 
 ## Tecnologías Utilizadas
