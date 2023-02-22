@@ -2,6 +2,7 @@ const MoviesRoutes = require("./MoviesRouter");
 const GenresRoutes = require("./GenresRouter");
 const SearchingRoutes = require("./SearchingRouter");
 const SeriesRoutes = require("./SeriesRouter");
+const EpisodeRoutes = require("./EpisodesRouter");
 const express = require("express");
 
 const router = express.Router();
@@ -22,6 +23,10 @@ const defaultRoutes = [
   {
     path: "/series",
     route: SeriesRoutes,
+  },
+  {
+    path: "/episodes",
+    route: EpisodeRoutes,
   },
 ];
 

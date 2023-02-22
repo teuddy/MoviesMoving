@@ -8,7 +8,7 @@ const {
   findAllMovies,
   createMovie,
   deleteMovie,
-} = require("../controllers/MovieController.js");
+} = require("../controllers/movie/MovieController.js");
 
 const router = express.Router();
 

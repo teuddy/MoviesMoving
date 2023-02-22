@@ -1,6 +1,7 @@
-const Movie = require("../models/index").movies;
-const Genre = require("../models/index").genres;
-const Serie = require("../models/index").series;
+const Movie = require("../../models/index").movies;
+const Genre = require("../../models/index").genres;
+const Serie = require("../../models/index").series;
+
 const { Op } = require("sequelize");
 
 //create search controller

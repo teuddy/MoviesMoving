@@ -46,8 +46,31 @@ const createSerieSchema = joi.object({
   }),
 });
 
+//create episodes
+const createEpisodeSchema = joi.object({
+  seriesId: joi.number().required().messages({
+    "string.empty": `SerieId is required for Episode Creation`,
+  }),
+  title: joi.string().required().messages({
+    "string.empty": `Title is required for Episode Creation`,
+  }),
+  episodeNumber: joi.number().required().messages({
+    "string.empty": `EpisodeNumber is required for Episode Creation`,
+  }),
+  seasonNumber: joi.number().required().messages({
+    "string.empty": `SeasonNumber is required for Episode Creation`,
+  }),
+  sipnosis: joi.string().required().messages({
+    "string.empty": `Sipnosis is required for Episode Creation`,
+  }),
+  url: joi.string().required().messages({
+    "string.empty": `Url is required for Episode Creation`,
+  }),
+});
+
 module.exports = {
   createGenreSchema,
   createMovieSchema,
   createSerieSchema,
+  createEpisodeSchema,
 };

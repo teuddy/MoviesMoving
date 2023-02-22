@@ -1,6 +1,6 @@
 const express = require("express");
 
-const searchController = require("../controllers/SearchController");
+const searchController = require("../controllers/search/SearchController");
 const router = express.Router();
 
 //find all movies where title match the search query or search query match the genre name

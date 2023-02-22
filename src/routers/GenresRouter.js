@@ -2,7 +2,7 @@ const express = require("express");
 const {
   findAllGenres,
   createGenre,
-} = require("../controllers/GenreController.js");
+} = require("../controllers/genre/GenreController.js");
 
 const validate = require("../validators/validate.js");
 const Schema = require("../validators/Schemas.js");

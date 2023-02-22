@@ -1,4 +1,8 @@
-const { createSerie, getAllSeries } = require("../controllers/SerieController");
+const {
+  createSerie,
+  getAllSeries,
+  getSerie,
+} = require("../controllers/serie/SerieController");
 const express = require("express");
 
 const validate = require("../validators/validate");
@@ -14,5 +18,8 @@ router.route("/create").post(
 );
 //get all movies R
 router.route("/getall").get((req, res) => getAllSeries(req, res));
+
+//get seasons with episodes
+router.route("/:id").get((req, res) => getSerie(req, res));
 
 module.exports = router;

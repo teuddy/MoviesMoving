@@ -37,7 +37,7 @@ module.exports = (sequelize, Sequelize) => {
     Serie.hasMany(models.episodes, {
       foreignKey: {
         allowNull: false,
-        as: "serieId",
+        as: "seriesId",
       },
     });
   };

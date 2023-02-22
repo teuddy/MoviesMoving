@@ -42,7 +42,7 @@ module.exports = (sequelize, Sequelize) => {
     Episode.belongsTo(models.series, {
       foreignKey: {
         allowNull: false,
-        as: "serieId",
+        as: "seriesId",
       },
     });
   };

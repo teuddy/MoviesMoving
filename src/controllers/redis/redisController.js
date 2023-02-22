@@ -1,4 +1,4 @@
-const redisClient = require("../config/redisClient.js");
+const redisClient = require("../../config/redisClient.js");
 
 const getDataFromRedis = async (key) => {
   try {
