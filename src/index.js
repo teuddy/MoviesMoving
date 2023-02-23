@@ -1,25 +1,8 @@
 const express = require("express");
 const route = require("./routers/index.js");
-const db = require("./models");
-
-//gracefully shutdown
-const { createTerminus } = require("@godaddy/terminus");
-
-//admin pannel
-const AdminBro = require("admin-bro");
-const AdminBroExpress = require("@admin-bro/express");
-const AdminBroSequelize = require("@admin-bro/sequelize");
-
-//register adapter
-AdminBro.registerAdapter(AdminBroSequelize);
-
-//set up admin bro
-const adminBro = new AdminBro({
-  databases: [db],
-  rootPath: "/admin",
-});
-
-const router = AdminBroExpress.buildRouter(adminBro);
+const { router, adminBro } = require("./config/.adminbro/config.js");
+const signale = require("signale");
+const redisClient = require("./config/redisClient.js");
 
 const app = express();
 
@@ -32,29 +15,23 @@ app.use(adminBro.options.rootPath, router);
 //main router
 app.use("/v1", route);
 
-app.listen(3000, () => {
+//create a server form app
+const server = app.listen(3000, () => {
   console.log("Listening on port 3000");
 });
 
-//helth check
+// Handle server shutdown for SIGNIN signal
+process.on("SIGINT", () => {
+  signale.info("Received SIGNIN, shutting down server...");
+  server.close(() => {
+    signale.success("Express server closed");
+    //if redisclient not closed
+    if (redisClient) {
+      redisClient.quit();
+      signale.success("Redis client closed");
+    }
+    process.exit(0);
+  });
+});
 
-const onHealthCheck = () => Promise.resolve("UP");
-
-//when receveis SIGINT signal
-const onSignal = () => {
-  console.log("server is starting cleanup");
-  return Promise.resolve();
-};
-
-//pacefully stop server
-{
-  createTerminus;
-}
-app,
-  {
-    signal: "SIGINT",
-    healthChecks: {
-      "/health": onHealthCheck,
-    },
-    onSignal,
-  };
+module.exports = server;

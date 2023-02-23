@@ -1,5 +1,5 @@
 const Movie = require("../../models/index").movies;
-const redisController = require("../redis/RedisController.js");
+const redisController = require("../redis/redisController.js");
 
 const saveRecord = require("../saveRecord");
 const deleteRecord = require("../deleteRecord");

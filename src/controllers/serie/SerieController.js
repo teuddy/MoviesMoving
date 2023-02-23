@@ -4,7 +4,7 @@ const getRecords = require("../getRecords");
 const Serie = require("../../models/index").series;
 
 const Episode = require("../../models/index").episodes;
-const redisController = require("../redis/RedisController.js");
+const redisController = require("../redis/redisController.js");
 
 exports.createSerie = async (req, res) => {
   await redisController.deleteDataFromRedis("series");
