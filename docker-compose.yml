@@ -1,27 +1,39 @@
 version: "3.7"
-
 services:
-  mysql:
-    container_name: mysql
-    image: mysql:5.7
-    platform: linux/amd64
-    volumes:
-      - todo-mysql-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: database_development
-    ports:
-      - "3306:3306"
   redis:
-    container_name: redismovies
-    image: redis:6.2-alpine
-    restart: always
+    image: redis:7-bullseye
     ports:
       - "6379:6379"
     volumes:
       - cache:/data
+    networks:
+      - demoapp
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    networks:
+      - demoapp
 
 volumes:
   cache:
     driver: local
   todo-mysql-data:
+networks:
+  demoapp:
+# db:
+#     image: mysql
+#     env_file:
+#       - ./.env
+#     environment:
+#       MYSQL_USER: ${DB_USERNAME}
+#       MYSQL_PASSWORD: ${DB_PASSWORD}
+#       MYSQL_DATABASE: ${DB_DATABASE}
+#     ports:
+#       - "3306:3306"
+#     # networks:
+#     #   - demoapp
+#     volumes:
+#       - todo-mysql-data:/var/lib/mysql
